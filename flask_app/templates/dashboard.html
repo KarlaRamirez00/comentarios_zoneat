@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Locales de Comida</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Bienvenid@ {{usuario.nombre}} {{usuario.apellido}}!</h1>
+            <a href="/nuevo" class=" btn btn-success">Nuevo Local de Comida</a>
+            <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
+        </header>
+        <div class="row">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Local de Comida</th>
+                        <th>Dirección</th>
+                        <th>Sitio Web</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for local_comida in locales_comida %}
+                        <tr>
+                            <td>{{local_comida.nombre}}</td>
+                            <td>{{local_comida.direccion}}</td>
+                            <td>{{local_comida.sitio_web}}</td>
+                            <td>
+                                <a href="/ver/{{local_comida.id}}" class="btn btn-warning">Ver</a>
+                                {% if session['usuario_id'] == local_comida.usuario_id %}
+                                    <a href="/editar/{{local_comida.id}}" class="btn btn-primary">Editar</a>
+                                    <a href="/borrar/{{local_comida.id}}" class="btn btn-danger">Borrar</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</body>
+</html>

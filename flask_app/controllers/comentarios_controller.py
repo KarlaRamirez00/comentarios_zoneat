@@ -1,0 +1,59 @@
+from flask import Flask, render_template, redirect, request, session, flash
+from flask_app import app
+
+# Importamos los modelos
+from flask_app.models.comentario import Comentario
+from flask_app.models.local_comida import Local_comida  # Importar el modelo Local_comida
+
+@app.route('/locales/<int:local_comida_id>/comentarios', methods=['POST'])
+def create_comment(local_comida_id):
+    if 'usuario_id' not in session:
+        return redirect('/')
+    
+    #Bonus: El usuario creador de la película no puede comentar
+    # Obtener la película para luego saber quién es el usuario creador
+    local_comida = Local_comida.read_one({"id": local_comida_id})
+    # Verificar si el usuario actual es el creador de la película
+    if session['usuario_id'] == local_comida.usuario_id:
+        flash("No puedes comentar tu propio local_comida.", "comment")
+        return redirect(f'/locales/{local_comida_id}')
+
+    if not Comentario.validate_comment(request.form):
+        return redirect(f'/locales/{local_comida_id}')
+
+    data = {
+        'comentario': request.form['comentario'],
+        'local_comida_id': local_comida_id,  # Obtener local_comida_id de la ruta
+        'usuario_id': session['usuario_id']
+    }
+
+    Comentario.save(data)
+    return redirect(f'/locales/{local_comida_id}')
+
+#Ruta para ver la info y comentarios de una película específica
+@app.route('/locales/<int:id>')
+def view_movie(id):
+    data = {"id": id}
+    local_comida = Local_comida.read_one(data)
+
+    # Obtener los comentarios ordenados como se indica en la query del método get_by_local_comida_id
+    local_comida.comentarios = Comentario.get_by_local_comida_id(local_comida.id)
+
+    if not local_comida:
+        return redirect('/dashboard')
+    return render_template('view.html', local_comida=local_comida)
+
+#Ruta para Borra run comentario
+@app.route("/comentarios/<int:local_comida_id>/borrar/<int:comentario_id>", methods=['POST'])
+def delete_movie_comment(local_comida_id, comentario_id):
+    # Verificar que el usuario haya iniciado sesión
+    if 'usuario_id' not in session:
+        return redirect("/")
+    
+    # Obtener el comentario a eliminar
+    comentario = Comentario.get_comment_by_id(comentario_id)
+    
+    if comentario and comentario.usuario_id == session['usuario_id']:
+        Comentario.delete({"id": comentario_id, "usuario_id": session['usuario_id']})
+    
+    return redirect(f"/locales/{local_comida_id}")

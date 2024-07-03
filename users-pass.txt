@@ -1,0 +1,35 @@
+karla@gmail.com   ->   karla123
+jocelyn@gmail.com ->   Jocelyn123
+erick@gmail.com   ->   erick123
+toro@gmail.com    ->   toro123
+
+
+
+ZONEAT-KARLA/
+├── flask_app/
+│  ├── __init__.py 
+│  ├── bd/  
+│    └── Script-Zoneat.sql     
+│  └── config/  
+│    └── mysqlconnection.py     
+│  └── controllers/  
+│    └── usuarios_controller.py
+│     └── comentarios_controller.py      
+│  └── models/  
+│    └── usuario.py 
+│    └── comentario.py    
+│  └── static/  
+│    └── css/  
+│    	└── style_login.css  
+│    └── js/  
+│    	└── script.js  
+│    └── img/  
+│    	└── logo.png  
+│  └── templates/  
+│    └── index.html  
+│    └── login.html  
+    
+├── server.py  
+
+
+
