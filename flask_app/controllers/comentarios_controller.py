@@ -23,7 +23,8 @@ def create_comment(local_comida_id):
 
     data = {
         'comentario': request.form['comentario'],
-        'local_comida_id': local_comida_id,  # Obtener local_comida_id de la ruta
+        'cant_estrellas': int(request.form['estrellas']),  # Obtener y convertir a entero
+        'local_comida_id': local_comida_id,
         'usuario_id': session['usuario_id']
     }
 

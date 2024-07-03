@@ -36,18 +36,30 @@
             {% for c in local_comida.comentarios %}
                 <li class="list-group-item">
                     <h6>{{ c.user_name }} - {{ c.created_at.strftime("%d %B, %Y") }}</h6>
+                    <div class="rating-display">
+                        {% for i in range(c.cant_estrellas) %}
+                            <span class="star">&#9733;</span>  {# Estrella rellena (Unicode) #}
+                        {% endfor %}
+                        {% for i in range(5 - c.cant_estrellas) %}
+                            <span class="star">&#9734;</span>  {# Estrella vacía (Unicode) #}
+                        {% endfor %}
+                    </div>
                     <p>{{ c.comentario }}</p>
-                    {% if session.usuario_id == c.usuario_id %}
-                        <form action="/comentarios/{{ local_comida.id }}/borrar/{{ c.id }}" method="POST">
-                            <button type="submit" class="btn btn-danger">Borrar</button>
-                        </form>
-                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
 
         {% if session['usuario_id'] != local_comida.usuario_id %}
             <form action="/locales/{{ local_comida.id }}/comentarios" method="POST" class="mt-3">
+                <div class="mb-3">
+                    <label for="estrellas">Calificación:</label> <br>
+                    <div class="rating">
+                        {% for i in range(1, 6) %}
+                            <input type="radio" id="estrella{{i}}" name="estrellas" value="{{i}}" required>
+                            <label for="estrella{{i}}">{{i}} estrella{% if i > 1 %}s{% endif %}</label>
+                        {% endfor %}
+                    </div>
+                </div>
                 <div class="mb-3">
                     <label for="commentContent{{ local_comida.id }}" class="form-label">Nueva Reseña:</label>
                     <textarea class="form-control" id="commentContent{{ local_comida.id }}" name="comentario" rows="2"></textarea>
@@ -65,7 +77,7 @@
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
         {% else %}
-            <p class="text-danger">No Puedes comentar tu propio Local de Comida.</p>    
+            <p class="text-danger">No Puedes comentar tu propio Local de Comida.</p>    
         {% endif %}
         
     </div>
