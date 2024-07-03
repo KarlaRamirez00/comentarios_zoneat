@@ -3,17 +3,17 @@ from flask_app import app
 
 # Importamos los modelos
 from flask_app.models.comentario import Comentario
-from flask_app.models.local_comida import Local_comida  # Importar el modelo Local_comida
+from flask_app.models.local_comida import Local_comida
 
 @app.route('/locales/<int:local_comida_id>/comentarios', methods=['POST'])
 def create_comment(local_comida_id):
     if 'usuario_id' not in session:
         return redirect('/')
     
-    #Bonus: El usuario creador de la película no puede comentar
-    # Obtener la película para luego saber quién es el usuario creador
+    # Ojo El usuario creador del local de comida no puede comentar
+    # Obtener el local de comida para luego saber quién es el usuario creador
     local_comida = Local_comida.read_one({"id": local_comida_id})
-    # Verificar si el usuario actual es el creador de la película
+    # Verificar si el usuario actual es el creador del local de comida
     if session['usuario_id'] == local_comida.usuario_id:
         flash("No puedes comentar tu propio local_comida.", "comment")
         return redirect(f'/locales/{local_comida_id}')
@@ -31,7 +31,7 @@ def create_comment(local_comida_id):
     Comentario.save(data)
     return redirect(f'/locales/{local_comida_id}')
 
-#Ruta para ver la info y comentarios de una película específica
+# Ruta para ver la info y comentarios de un local de comida específico
 @app.route('/locales/<int:id>')
 def view_movie(id):
     data = {"id": id}
@@ -44,9 +44,9 @@ def view_movie(id):
         return redirect('/dashboard')
     return render_template('view.html', local_comida=local_comida)
 
-#Ruta para Borra run comentario
+# Ruta para Borrar un comentario
 @app.route("/comentarios/<int:local_comida_id>/borrar/<int:comentario_id>", methods=['POST'])
-def delete_movie_comment(local_comida_id, comentario_id):
+def delete_local_comment(local_comida_id, comentario_id):
     # Verificar que el usuario haya iniciado sesión
     if 'usuario_id' not in session:
         return redirect("/")
