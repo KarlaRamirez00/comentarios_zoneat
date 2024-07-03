@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `esquema_zoneat`.`usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   `apellido` VARCHAR(45) NULL,
+  `tipo_usuario` CHAR(1) NOT NULL,
   `email` VARCHAR(45) NULL,
   `contrasena` VARCHAR(255) NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
@@ -59,6 +60,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `esquema_zoneat`.`comentarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `comentario` TEXT NULL,
+  `cant_estrellas` TINYINT(5) NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `usuario_id` INT NOT NULL,

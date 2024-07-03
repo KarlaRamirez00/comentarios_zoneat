@@ -28,12 +28,13 @@ def register():
     #Encriptar o Hashear contraseña
     pass_hash = bcrypt.generate_password_hash(request.form["contrasena"])
 
-    #Crear un diccionario que simule el form incluyendo la contraseña hasheada
+    # Crear un diccionario que simule el form incluyendo la contraseña hasheada y el tipo de usuario
     form = {
         "nombre": request.form["nombre"],
         "apellido": request.form["apellido"],
         "email": request.form["email"],
-        "contrasena": pass_hash
+        "contrasena": pass_hash,
+        "tipo_usuario": request.form["tipo_usuario"]
     }
 
     id = Usuario.save(form) #recibo el id del nuevo usuario 1
@@ -71,8 +72,10 @@ def login():
         flash("Password incorrect", "login")
         return redirect("/")
     
-    session["usuario_id"] = usuario.id
-    return redirect("/dashboard")
+    session['usuario_id'] = usuario.id
+    session['nombre'] = usuario.nombre
+    session['tipo_usuario'] = usuario.tipo_usuario  # Guardar el tipo de usuario en la sesión
+    return redirect('/dashboard')
 
 @app.route("/logout")
 def logout():

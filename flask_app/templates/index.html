@@ -9,56 +9,61 @@
 <body>
     <div class="container">
         <div class="row">
-            <!-- REGISTRO -->
             <div class="col-6">
                 <h2>Registro</h2>
-                <!--Mensajes de error "register"-->
                 {% with messages = get_flashed_messages(category_filter=['register']) %}
                     {% if messages %}
                         <div class="alert alert-danger">
                             {% for message in messages %}
-                                <p>{{message}}</p>
+                                <p>{{ message }}</p>
                             {% endfor %}
                         </div>
                     {% endif %}
                 {% endwith %}
-                <form action="/register" method="POST" >
+                <form action="/register" method="POST">
                     <div>
                         <label><span class="text-danger">*</span>Nombre</label>
-                        <input class="form-control" name="nombre" >
+                        <input class="form-control" name="nombre">
                     </div>
                     <div>
                         <label>Apellido</label>
-                        <input class="form-control" name="apellido" >
+                        <input class="form-control" name="apellido">
                     </div>
                     <div>
                         <label>E-mail</label>
-                        <input class="form-control" name="email" >
+                        <input class="form-control" name="email">
                     </div>
                     <div>
                         <label>Contraseña</label>
-                        <input type="password" class="form-control" name="contrasena" >
+                        <input type="password" class="form-control" name="contrasena">
                     </div>
                     <div>
                         <label>Conf. Contraseña</label>
-                        <input type="password" class="form-control" name="confirm" >
+                        <input type="password" class="form-control" name="confirm">
                     </div>
-                    <input type="submit" class="btn btn-info mt-3" value="Registrar" >
+                    <div class="mb-3">
+                        <label for="tipo_usuario" class="form-label">Tipo de usuario:</label>
+                        <select id="tipo_usuario" name="tipo_usuario" class="form-select" required>
+                            <option value="1">Propietario</option>
+                            <option value="2" selected>Cliente</option>
+                        </select>
+                    </div>
+                    <input type="submit" class="btn btn-info mt-4" value="Registrar">
                 </form>
             </div>
-            <!-- Inicio de sesión -->
+
             <div class="col-6">
                 <h2>Inicio de Sesión</h2>
-                 <!--Mensajes de error "login"-->
-                 {% with messages = get_flashed_messages(category_filter=['login']) %}
+                <!--Mensajes de error "login"-->
+                {% with messages = get_flashed_messages(category_filter=['login']) %}
                     {% if messages %}
                         <div class="alert alert-danger">
                             {% for message in messages %}
-                                <p>{{message}}</p>
+                                <p>{{ message }}</p>
                             {% endfor %}
                         </div>
                     {% endif %}
-                {% endwith %}                 
+                {% endwith %}
                 <form action="/login" method="POST">
                     <div>
                         <label>E-mail</label>

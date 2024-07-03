@@ -11,6 +11,10 @@ def nuevo():
     # Verificar que el usuario haya iniciado sesión
     if 'usuario_id' not in session:
         return redirect("/")
+    
+    # Verificar si el usuario es propietario (tipo_usuario = '1')
+    if session.get('tipo_usuario') != '1':
+        return redirect('/dashboard')
 
     # Crear una instancia vacía de Local_comida
     local_comida = Local_comida({
@@ -35,7 +39,7 @@ def create():
     #Verificar que el usuario haya iniciado sesión
     if 'usuario_id' not in session:
         return redirect("/")
-    
+        
     #Validamos
     if not Local_comida.validate_pelicula(request.form):
         return redirect("/nuevo")
@@ -59,7 +63,7 @@ def delete(id):
     if 'usuario_id' not in session:
         return redirect("/")
     
-    #Metodo que borra una película en base a su ID
+    #Metodo que borra un local de comida en base a su ID
     dicc = {"id" : id}
     Local_comida.delete(dicc)
     return redirect("/dashboard")
@@ -71,8 +75,8 @@ def edit(id):
         return redirect("/")
     
     dicc = {"id" : id} #{"id" = 1}
-    local_comida = Local_comida.read_one(dicc) #Invoco de la clase Pelicula al método read_one(), enviamos el diccionario y recibimos un objeto Pelicula. OJO! esto es para poder editar con los datos prepoblados.
-    #Revisar que sí sea el usuario en sesión el mismo que creó la película, para que la pueda editar
+    local_comida = Local_comida.read_one(dicc) #Invoco de la clase Local_comida al método read_one(), enviamos el diccionario y recibimos un objeto Local_comida. OJO! esto es para poder editar con los datos prepoblados.
+    #Revisar que sí sea el usuario en sesión el mismo que creó el local, para que la pueda editar
     if session['usuario_id'] != local_comida.usuario_id:
         return redirect("/dashboard")
     

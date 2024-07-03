@@ -11,6 +11,7 @@ class Usuario:
         self.id = data["id"]
         self.nombre = data["nombre"]
         self.apellido = data["apellido"]
+        self.tipo_usuario = data["tipo_usuario"]
         self.email = data["email"]
         self.contrasena = data["contrasena"]
         self.created_at = data["created_at"]
@@ -20,9 +21,8 @@ class Usuario:
     #Metodo que crea un nuevo objeto de Usuario
     @classmethod
     def save(cls, form):
-        #form = {"nombre":"Elena", "last_name":"De Troya", "email":"elena@cd.com", "password":"YA ESTÁ HASHEADO"}
-        query = "INSERT INTO usuarios (nombre, apellido, email, contrasena) VALUES (%(nombre)s, %(apellido)s, %(email)s, %(contrasena)s)"
-        return connectToMySQL('esquema_zoneat').query_db(query, form) #Regresa el id del nuevo registro
+        query = "INSERT INTO usuarios (nombre, apellido, tipo_usuario, email, contrasena) VALUES (%(nombre)s, %(apellido)s, %(tipo_usuario)s, %(email)s, %(contrasena)s)"
+        return connectToMySQL('esquema_zoneat').query_db(query, form)
     
     #Metodo que regresa objeto de Usuario en base a email
     @classmethod
@@ -85,6 +85,11 @@ class Usuario:
         #Validamos que el email cumpla con la expresion regular
         if not EMAIL_REGEX.match(form["email"]):
             flash("Email not valid", "register")
+            is_valid = False
+        
+        # Validar tipo de usuario
+        if form['tipo_usuario'] not in ['1', '2']:
+            flash("Tipo de usuario inválido. Debes seleccionar 'Propietario' o 'Cliente'.", "register")
             is_valid = False
         
         return is_valid
