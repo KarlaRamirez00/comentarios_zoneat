@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usiario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h2>Editar Usuario</h2>
+                {% with messages = get_flashed_messages(category_filter=['register']) %}
+                    {% if messages %}
+                        <div class="alert alert-danger">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <form action="/actualizar_usuario/{{usuario.id}}" method="POST">
+                    <div>
+                        <label><span class="text-danger">*</span>Nombre</label>
+                        <input class="form-control" name="nombre" value="{{ session.get('nombre_edit', '') }}">
+                    </div>
+                    <div>
+                        <label>Apellido</label>
+                        <input class="form-control" name="apellido" value="{{ session.get('apellido_edit', '') }}">
+                    </div>
+                    <div>
+                        <label>E-mail</label>
+                        <input class="form-control" name="email" value="{{ session.get('email_edit', '') }}">
+                    </div>
+                    <div>
+                        <label>Contraseña</label>
+                        <input type="password" class="form-control" name="contrasena">
+                    </div>
+                    <div>
+                        <label>Conf. Contraseña</label>
+                        <input type="password" class="form-control" name="confirm">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipo_usuario" class="form-label">Tipo de usuario:</label>
+                        <select id="tipo_usuario" name="tipo_usuario" class="form-select" required>
+                            <option value="1" {% if session.get('tipo_usuario_edit') == '1' %}selected{% endif %}>Propietario</option>
+                            <option value="2" {% if session.get('tipo_usuario_edit') == '2' %}selected{% endif %}>Cliente</option>
+                        </select>
+                    </div>
+                    <input type="submit" class="btn btn-info mt-4" value="Confirmar Cambios">
+                    <button type="button" class="btn btn-secondary mt-4" onclick="window.location.href='/dashboard'">Atrás</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

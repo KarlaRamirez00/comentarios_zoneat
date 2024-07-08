@@ -10,6 +10,8 @@
     <div class="container">
         <header class="d-flex justify-content-between align-items-center mb-3">
             <h1>Bienvenid@ {{usuario.nombre}} {{usuario.apellido}}!</h1>
+            <!--Aqui agregar boton para editar usuario-->
+            <a href="/edit_user/{{usuario.id}}" class="btn btn-secondary btn-sm">Editar Usuario</a>
             {% if session.get('tipo_usuario') == '1' %}
                 <a href="/nuevo" class=" btn btn-success">Nuevo Local de Comida</a>
             {% endif %}
@@ -22,6 +24,7 @@
                         <th>Local de Comida</th>
                         <th>Dirección</th>
                         <th>Sitio Web</th>
+                        <th>Categoria</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -31,6 +34,7 @@
                             <td>{{local_comida.nombre}}</td>
                             <td>{{local_comida.direccion}}</td>
                             <td>{{local_comida.sitio_web}}</td>
+                            <td>{{local_comida.categoria}}</td>
                             <td>
                                 <a href="/ver/{{local_comida.id}}" class="btn btn-warning">Ver</a>
                                 {% if session['usuario_id'] == local_comida.usuario_id %}

@@ -15,7 +15,8 @@ class Local_comida:
         self.direccion = data["direccion"]
         self.telefono = data["telefono"]
         self.email = data["email"]
-        self.sitio_web = data["sitio_web"]        
+        self.sitio_web = data["sitio_web"]
+        self.categoria = data["categoria"]       
         self.created_at = data["created_at"]
         self.updated_at = data["updated_at"]
         self.usuario_id = data["usuario_id"]
@@ -27,8 +28,13 @@ class Local_comida:
     # Metodo que crea un nuevo objeto de local de comida
     @classmethod
     def create(cls, form):
-        query = "INSERT INTO locales_comida (nombre, direccion, telefono, email, sitio_web, usuario_id) VALUES (%(nombre)s, %(direccion)s, %(telefono)s, %(email)s, %(sitio_web)s,  %(usuario_id)s);"
-        return connectToMySQL('esquema_zoneat').query_db(query, form) #Regresa el id de nueva localcula     
+        query = """
+        INSERT INTO locales_comida (nombre, direccion, telefono, email, sitio_web, categoria, usuario_id) 
+        VALUES (%(nombre)s, %(direccion)s, %(telefono)s, %(email)s, %(sitio_web)s, %(categoria)s, %(usuario_id)s);
+        """
+        result = connectToMySQL('esquema_zoneat').query_db(query, form)
+        print("Resultado de la creación:", result)
+        return result     
 
     # Metodo que muestra un objeto de local de comida
     @classmethod
@@ -60,7 +66,7 @@ class Local_comida:
         return locales_comida
     
     @staticmethod
-    def validate_pelicula(form):
+    def validate_local_comida(form):
         is_valid = True
 
         if len(form["nombre"]) < 3:

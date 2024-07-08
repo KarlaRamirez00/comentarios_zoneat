@@ -24,6 +24,7 @@ def nuevo():
         "telefono": "",
         "email": "",
         "sitio_web": "",
+        "categoria": "",
         "created_at": None,
         "updated_at": None,
         "usuario_id": session['usuario_id'],  # Pasar el ID del usuario en sesión
@@ -40,11 +41,17 @@ def create():
     if 'usuario_id' not in session:
         return redirect("/")
         
-    #Validamos
-    if not Local_comida.validate_Local_comida(request.form):
-        return redirect("/nuevo")
+    # Validamos
+    if not Local_comida.validate_local_comida(request.form):
+        return redirect("/nuevo")    
+    # Crear el nuevo local de comida
+    nuevo_local_id = Local_comida.create(request.form)
     
-    Local_comida.create(request.form)
+    if nuevo_local_id:
+        print(f"Nuevo local creado con ID: {nuevo_local_id}")
+    else:
+        print("Error al crear el nuevo local")
+    
     return redirect("/dashboard")
 
 @app.route("/ver/<int:id>") #ver/1
@@ -90,7 +97,7 @@ def update():
     
     # Recibir request.form = diccionario con la info del formulario
     # Validamos
-    if not Local_comida.validate_Local_comida(request.form):
+    if not Local_comida.validate_local_comida(request.form):
         return redirect("/editar"+request.form["id"])
     
     Local_comida.update(request.form)

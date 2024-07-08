@@ -93,3 +93,33 @@ class Usuario:
             is_valid = False
         
         return is_valid
+    
+    @classmethod
+    def update(cls, data):
+        query = """
+            UPDATE usuarios 
+            SET nombre=%(nombre)s, apellido=%(apellido)s, email=%(email)s, 
+                contrasena=IF(%(contrasena)s != '', %(contrasena)s, contrasena), 
+                tipo_usuario=%(tipo_usuario)s 
+            WHERE id=%(id)s;
+        """
+        return connectToMySQL('esquema_zoneat').query_db(query, data)
+
+    @staticmethod
+    def validate_user_edit(form):
+        is_valid = True
+
+        if not EMAIL_REGEX.match(form["email"]):
+            flash("Email no válido.", "edit")
+            is_valid = False
+
+        if form["contrasena"] != form["confirm"]:
+            flash("Las contraseñas no coinciden.", "edit")
+            is_valid = False
+
+        # Validar tipo de usuario
+        if form['tipo_usuario'] not in ['1', '2']:
+            flash("Tipo de usuario inválido. Debes seleccionar 'Propietario' o 'Cliente'.", "edit")
+            is_valid = False
+
+        return is_valid

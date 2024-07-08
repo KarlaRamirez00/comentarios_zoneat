@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `esquema_zoneat`.`locales_comida` (
   `telefono` VARCHAR(12) NULL,
   `email` VARCHAR(45) NULL,
   `sitio_web` VARCHAR(45) NULL,
+  `categoria` VARCHAR(45) NULL,
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `usuario_id` INT NOT NULL,

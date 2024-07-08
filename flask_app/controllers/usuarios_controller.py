@@ -40,6 +40,7 @@ def register():
     id = Usuario.save(form) # recibo el id del nuevo usuario 1
     session["usuario_id"] = id
     session["nombre"] = request.form["nombre"]
+    session['tipo_usuario'] = request.form["tipo_usuario"]
     return redirect("/dashboard")
 
 # Ruta que recibe el formulario
@@ -80,3 +81,56 @@ def login():
 def logout():
     session.clear()
     return redirect("/")
+
+@app.route('/edit_user/<int:usuario_id>')
+def edit_user(usuario_id):
+    if 'usuario_id' not in session or session['usuario_id'] != usuario_id:
+        return redirect('/')
+
+    data = {'id': usuario_id}
+    usuario = Usuario.get_by_id(data)  # Obtiene los datos del usuario a editar
+
+    # Prellenar los datos en la sesión para que se muestren en el formulario
+    session['editando_usuario'] = True
+    session['nombre_edit'] = usuario.nombre
+    session['apellido_edit'] = usuario.apellido
+    session['email_edit'] = usuario.email
+    session['tipo_usuario_edit'] = usuario.tipo_usuario
+    
+    return render_template("edit_user.html", usuario=usuario)  # Pasar el objeto 'usuario' a la plantilla
+
+from flask import flash
+
+@app.route('/actualizar_usuario/<int:usuario_id>', methods=['POST'])
+def actualizar_usuario(usuario_id):
+    if 'usuario_id' not in session or session['usuario_id'] != usuario_id:
+        return redirect('/')
+
+    # Convertir request.form a un diccionario mutable
+    form_data = request.form.to_dict()
+
+    # Añadir el id del usuario al diccionario
+    form_data['id'] = usuario_id
+
+    # Validación de datos (similar a la del registro, pero adaptada para la edición)
+    if not Usuario.validate_user_edit(form_data):
+        return redirect(f'/edit_user/{usuario_id}')
+
+    # Encriptar la nueva contraseña (si se proporcionó)
+    if form_data['contrasena']:
+        pass_hash = bcrypt.generate_password_hash(form_data["contrasena"])
+        form_data['contrasena'] = pass_hash
+    else:
+        form_data['contrasena'] = ''  # Mantener la contraseña actual si no se proporciona una nueva
+
+    # Actualizar los datos del usuario en la base de datos
+    Usuario.update(form_data)
+
+    # Limpiar variables de sesión
+    session.pop('editando_usuario', None)
+    session.pop('nombre_edit', None)
+    session.pop('apellido_edit', None)
+    session.pop('email_edit', None)
+    session.pop('tipo_usuario_edit', None)
+    
+    return redirect('/dashboard')

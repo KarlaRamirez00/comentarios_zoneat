@@ -46,6 +46,9 @@
                     <label>Sitio Web:</label>
                     <input type="text" class="form-control" name="sitio_web" value="{{ local_comida.sitio_web }}">
                 </div>
+                <div class="mb-3"> 
+                    <label for="categoria" class="form-label">Categoría:</label> <select id="categoria" name="categoria" class="form-select" required> <option value="General" selected>General</option> <option value="Vegan">Vegan</option> <option value="Gluten Free">Gluten Free</option> </select>
+                </div>
                 <input type="hidden" name="usuario_id" value="{{session['usuario_id']}}">
                 <input type="submit" class="btn btn-success mt-3" value="Guardar Local de Comida">
             </form>
